@@ -25,3 +25,15 @@ class UserForm(Form):
 
     """ materias=SelectField(choices=[('Español','esp'),('Matematicas','mat'), ('Ingles','ING') ])
     radios=RadioField('Curso',choices=[('1','1'),('2','2'),('3','3')]) """
+    
+class UserForm2(Form):
+    id=IntegerField('id')
+    nombre = StringField("nombre", [
+        validators.DataRequired(message="El campo es requerido"),
+        validators.Length(min=4, max=10, message='Ingrese un nombre válido')
+    ])
+    email = EmailField("correo", [
+        validators.Email(message='Ingrese un correo válido')
+    ])
+    apaterno = StringField("apaterno")
+    

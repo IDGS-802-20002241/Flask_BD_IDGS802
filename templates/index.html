@@ -1,5 +1,34 @@
-{%extends "layout.html" %}
+{%extends "layout2.html" %}
+{%from "_macros.html" import input_Form %}
 {%block content %}
-<h1>Hola desde el index</h1>
-{% endblock %}
+<h1>Alumnos BD</h1>
 
+
+<div class="container">
+    <div class="row">
+        <form action="/index" class="registro" id="registro" method="POST">
+            <div class="rew control-group">
+                <div class="form-group col-xs-12 float-label-form-group controls">
+                    {{input_Form(form.nombre,calss="form-group")}}
+                </div>
+
+            </div>
+            <div class="rew control-group">
+                <div class="form-group col-xs-12 float-label-form-group controls">
+                    {{input_Form(form.apaterno,calss="form-group")}}
+                </div>
+
+            </div>
+            <div class="rew control-group">
+                <div class="form-group col-xs-12 float-label-form-group controls">
+                    {{input_Form(form.email,calss="form-group")}}
+                </div>
+
+            </div>
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+            <input type="submit" id="registrar" name="registrar" value="Registrar">
+
+        </form>
+    </div>
+</div>
+{% endblock %}
