@@ -1,5 +1,5 @@
 from wtforms import Form,validators
-from wtforms import StringField, TextAreaField,SelectField,RadioField,IntegerField
+from wtforms import StringField, TextAreaField,SelectField,RadioField,IntegerField,HiddenField
 from wtforms import EmailField
 
 
@@ -27,7 +27,7 @@ class UserForm(Form):
     radios=RadioField('Curso',choices=[('1','1'),('2','2'),('3','3')]) """
     
 class UserForm2(Form):
-    id=IntegerField('id')
+    id=HiddenField('Id')
     nombre = StringField("nombre", [
         validators.DataRequired(message="El campo es requerido"),
         validators.Length(min=4, max=10, message='Ingrese un nombre válido')

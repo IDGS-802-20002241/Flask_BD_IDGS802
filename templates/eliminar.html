@@ -1,0 +1,40 @@
+{%extends "layout2.html" %}
+{%from "_macros.html" import input_Form %}
+{%block content %}
+<h1>Alumnos BD</h1>
+
+
+<div class="container">
+    <div class="row">
+        <form action="/eliminar" class="eliminar" id="eliminar" method="POST">
+            <div class="rew control-group">
+                <div class="form-group col-xs-12 float-label-form-group controls">
+                    {{input_Form(form.id,class="form-group")}}
+                </div>
+
+            </div>
+            <div class="rew control-group">
+                <div class="form-group col-xs-12 float-label-form-group controls">
+                    {{input_Form(form.nombre,class="form-group")}}
+                </div>
+
+            </div>
+            <div class="rew control-group">
+                <div class="form-group col-xs-12 float-label-form-group controls">
+                    {{input_Form(form.apaterno,class="form-group")}}
+                </div>
+
+            </div>
+            <div class="rew control-group">
+                <div class="form-group col-xs-12 float-label-form-group controls">
+                    {{input_Form(form.email,class="form-group")}}
+                </div>
+
+            </div>
+            <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+            <input type="submit" id="eliminar-submit" name="eliminar" value="Eliminar" class="btn btn-danger">
+            <a href="ABC_Completo" class="btn btn-success">Cancelar</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
