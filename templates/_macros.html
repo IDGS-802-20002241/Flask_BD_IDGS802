@@ -4,9 +4,14 @@
 {%endmacro%}
 
 
-{%macro input_Form(Field)%}
-<td>{{Field.label}}</td>
-<dd>{{ Field(**kwargs)|safe}}</dd>
+{% macro input_Form(Field, label='', class='') %}
+    <td>{{ label if label else Field.label }}</td>
+    {% if class_name %}
+        <dd>{{ Field(class=class) | safe }}</dd>
+    {% else %}
+        <dd>{{ Field() | safe }}</dd>
+    {% endif %}
+
 
 {%if Field.errors%}
 <ul>

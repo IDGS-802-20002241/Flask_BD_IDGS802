@@ -1,0 +1,186 @@
+{%extends "layout2.html" %}
+{%from "_macros.html" import input_Form %}
+{%block content %}
+
+
+
+
+<h3>Pizzeria</h3>
+<form action="/pizzeria" class="registro" id="registro" method="POST">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
+                {{input_Form(form.nombre, class="form-control")}}
+            </div>
+            <div class="col-xl-4 col-lg-6 col-md-6 col-sm-12">
+                {{input_Form(form.direccion, class="form-control")}}
+            </div>
+            <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12">
+                {{input_Form(form.telefono, class="form-control")}}
+            </div>
+        </div>
+
+
+        <div class="row">
+
+            <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12">
+
+                {{input_Form(form.tamano, class="form-control")}}
+
+            </div>
+
+            <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12">
+                {{input_Form(form.num_pizzas, class="form-control")}}
+            </div>
+            <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12">
+                <fieldset>
+                    <legend>Ingredientes</legend>
+                    {{ input_Form(form.ing1, label='Jamon', class='form-control') }}
+                    {{ input_Form(form.ing2, label='Piña', class='form-control') }}
+                    {{ input_Form(form.ing3, label='Champiñones', class='form-control') }}
+                    {{ input_Form(form.fecha, class='form-control') }}
+                </fieldset>
+                <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                <input type="submit" id="agregar" name="agregar" value="Agregar" class="btn btn-outline-success">
+
+            </div>
+
+        </div>
+
+    </div>
+</form>
+
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr class="table-info">
+                <td class="tamano">Tamaño</td>
+                <td class="ingredientes">Ingredientes</td>
+                <td class="nump">Num. pizzas</td>
+                <td class="subtotal">Sub total</td>
+                <td class="table-danger">Acción</td>
+
+
+
+            </tr>
+        </thead>
+        <tbody>
+
+            {% if request and request | length > 0%}
+            {% for r in request %}
+            <tr class="table-primary">
+                {% set palabras = r.split(' : ') %}
+                {% for n in palabras %}
+                <td>{{(n.replace("-","<br>")) | safe}}</td>
+                {% endfor %}
+                <td>
+                    <form method="POST" action="/pizzeria"
+                        onsubmit="return confirm('¿Estás seguro de eliminar este registro?');">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+                        <input type="hidden" name="indice" value="{{ loop.index }}">
+                        <button class="btn btn-outline-danger" type="submit">Eliminar</button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+            {% else %}
+            <tr>
+                <td colspan="8" style="text-align: center;">No hay registros para mostrar</td>
+            </tr>
+            {% endif %}
+
+
+
+
+
+
+
+
+
+        </tbody>
+    </table>
+    <form action="/pizzeria" class="registro" id="registro" method="POST"
+        onsubmit="return confirm('¿Estás seguro terminar tu orden?');">
+        <input type="hidden" name="_method" value="PUT">
+        <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+
+        <button class="btn btn-outline-info" type="submit">Terminar orden</button>
+    </form>
+    <br>
+    <div class="row">
+
+        <div class="col-xl-4 col-lg-12 col-md-12 col-sm-12">
+            <form action="/pizzeria" method="POST">
+                <label for="fecha">Buscar por fecha o día:</label>
+                <input type="hidden" name="csrf_token" value="{{csrf_token()}}">
+                <input type="hidden" name="_method" value="Busqueda">
+                <input type="text" id="fecha" name="fecha" class="form-control"
+                    placeholder="Ejemplo: 2024-03-01 o Martes">
+                <br><button type="submit" class="btn btn-outline-primary">Buscar</button>
+            </form>
+        </div>
+
+    
+        <div class="col-xl-8 col-lg-12 col-md-12 col-sm-12">
+            <table class="table table-primary">
+                <thead>
+                    <tr class="table-info">
+
+                        <th scope="col">ID</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Dirección</th>
+                        <th scope="col">Tamaño</th>
+                        <th scope="col">Teléfono</th>
+                        <th scope="col">Ingredientes</th>
+                        <th scope="col">Número de Pizzas</th>
+                        <th scope="col">Fecha</th>
+                        <th scope="col">Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                
+                    {% for registro in ventas %}
+                    <tr>
+                        <td>{{ registro.id }}</td>
+                        <td>{{ registro.nombre }}</td>
+                        <td>{{ registro.direccion }}</td>
+                        <td>{{ registro.tamano }}</td>
+                        <td>{{ registro.telefono }}</td>
+                        <td>{{ registro.ingredietes }}</td>
+                        <td>{{ registro.num_pizzas }}</td>
+                        <td>{{ registro.fecha_orden }}</td>
+                        <td>{{ registro.total | default(0) | int }}</td>
+                    </tr>
+                    
+
+                    {% endfor %}
+                    <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td style="color: black;font-size:large;" class="table-danger"><b>Total de ventas: {{ total }}</b></td>
+                    </tr>
+                    
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+
+
+
+</div>
+</div>
+
+
+
+{% endblock %}
